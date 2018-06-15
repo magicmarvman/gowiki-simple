@@ -10,7 +10,14 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"os"
 )
+
+lang := os.Args[:1][0]
+
+if lang == nil {
+	lang = "en"	
+}
 
 type Page struct {
 	Title string
@@ -37,7 +44,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
 		return
 	}
-	renderTemplate(w, "view", p)
+	renderTemplate(w, "view" + lang, p)
 }
 
 func editHandler(w http.ResponseWriter, r *http.Request, title string) {
@@ -45,7 +52,7 @@ func editHandler(w http.ResponseWriter, r *http.Request, title string) {
 	if err != nil {
 		p = &Page{Title: title}
 	}
-	renderTemplate(w, "edit", p)
+	renderTemplate(w, "edit" + lang, p)
 }
 
 func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
